@@ -10,19 +10,38 @@
             text-align: center;
             background-color: #ffe4b5;
             color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
             background: #fff;
-            border-radius: 10px;
+            border: 5px solid red;
+            padding: 20px;
+            border-radius: 15px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+        .touch-box {
+            background: #ffcc00;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .fortune-container {
+            display: none;
+            margin-top: 20px;
         }
         .fortune {
             font-size: 20px;
             font-weight: bold;
-            margin-top: 20px;
         }
         .lucky-number {
             font-size: 18px;
@@ -32,12 +51,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>오늘의 포춘쿠키</h1>
-        <p class="fortune" id="fortune">운세를 불러오는 중...</p>
-        <p class="lucky-number" id="luckyNumber">행운의 번호: </p>
-        <p id="luckyColor">행운의 색깔: </p>
-        <p id="luckyItem">행운의 물건: </p>
-        <button onclick="generateFortune()">새로운 운세 보기</button>
+        <div class="touch-box" onclick="showFortune()">터치해주세요</div>
+        <div class="fortune-container" id="fortuneContainer">
+            <h1>오늘의 포춘쿠키</h1>
+            <p class="fortune" id="fortune">운세를 불러오는 중...</p>
+            <p class="lucky-number" id="luckyNumber">행운의 번호: </p>
+            <p id="luckyColor">행운의 색깔: </p>
+            <p id="luckyItem">행운의 물건: </p>
+        </div>
     </div>
 
     <script>
@@ -48,10 +69,9 @@
             "새로운 인연이 다가오고 있어요.", 
             "행운의 기운이 감돌고 있습니다."
         ];
-
         const colors = ["빨강", "파랑", "초록", "노랑", "보라", "검정", "흰색"];
         const items = ["열쇠", "책", "코인", "손수건", "반지", "목걸이", "시계"];
-
+        
         function generateLuckyNumbers() {
             let numbers = new Set();
             while (numbers.size < 7) {
@@ -59,15 +79,19 @@
             }
             return Array.from(numbers).join(", ");
         }
-
+        
         function generateFortune() {
             document.getElementById("fortune").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
             document.getElementById("luckyNumber").innerText = "행운의 번호: " + generateLuckyNumbers();
             document.getElementById("luckyColor").innerText = "행운의 색깔: " + colors[Math.floor(Math.random() * colors.length)];
             document.getElementById("luckyItem").innerText = "행운의 물건: " + items[Math.floor(Math.random() * items.length)];
         }
-
-        window.onload = generateFortune;
+        
+        function showFortune() {
+            document.querySelector(".touch-box").style.display = "none";
+            document.getElementById("fortuneContainer").style.display = "block";
+            generateFortune();
+        }
     </script>
 </body>
 </html>
