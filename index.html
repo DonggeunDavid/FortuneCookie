@@ -8,57 +8,89 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #ffe4b5;
+            background-color: #ffe680; /* 연한 노랑 */
             color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
         }
         .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
             background: #fff;
-            border: 5px solid red;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            position: relative;
+            border-radius: 10px;
+            border: 10px solid #228B22; /* 초록색 테두리 */
         }
-        .touch-box {
-            background: #ffcc00;
-            padding: 20px;
-            font-size: 20px;
-            font-weight: bold;
+        .fortune-box {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(145deg, #fffacd, #f0e68c);
+            border: 8px solid #228B22; /* 초록색 테두리 */
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin: 40px auto;
+            position: relative;
         }
-        .fortune-container {
-            display: none;
-            margin-top: 20px;
+        .fortune-box::before {
+            content: "福"; /* 중국 전통 문양 */
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            background: #228B22;
+            top: -30px;
+            left: 0;
+            border-radius: 5px;
+            font-size: 40px;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+        }
+        .fortune-box::after {
+            content: "🐉";
+            position: absolute;
+            font-size: 100px;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.6;
+        }
+        .fortune-box:hover {
+            transform: scale(1.1);
+        }
+        .fortune-box.shake {
+            animation: shake 0.5s ease-in-out 3;
+        }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
         }
         .fortune {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
+            margin-top: 20px;
+            display: none;
         }
-        .lucky-number {
-            font-size: 18px;
-            color: #d35400;
+        .lucky-number, #luckyColor, #luckyItem {
+            font-size: 22px;
+            color: #006400; /* 진한 초록 */
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="touch-box" onclick="showFortune()">터치해주세요</div>
-        <div class="fortune-container" id="fortuneContainer">
-            <h1>오늘의 포춘쿠키</h1>
-            <p class="fortune" id="fortune">운세를 불러오는 중...</p>
-            <p class="lucky-number" id="luckyNumber">행운의 번호: </p>
-            <p id="luckyColor">행운의 색깔: </p>
-            <p id="luckyItem">행운의 물건: </p>
-        </div>
+        <h1>오늘의 포춘쿠키</h1>
+        <div class="fortune-box" onclick="shakeAndReveal()">터치해주세요</div>
+        <p class="fortune" id="fortune">운세를 불러오는 중...</p>
+        <p class="lucky-number" id="luckyNumber">행운의 번호: </p>
+        <p id="luckyColor">행운의 색깔: </p>
+        <p id="luckyItem">행운의 물건: </p>
     </div>
 
     <script>
@@ -69,9 +101,10 @@
             "새로운 인연이 다가오고 있어요.", 
             "행운의 기운이 감돌고 있습니다."
         ];
+
         const colors = ["빨강", "파랑", "초록", "노랑", "보라", "검정", "흰색"];
         const items = ["열쇠", "책", "코인", "손수건", "반지", "목걸이", "시계"];
-        
+
         function generateLuckyNumbers() {
             let numbers = new Set();
             while (numbers.size < 7) {
@@ -79,18 +112,26 @@
             }
             return Array.from(numbers).join(", ");
         }
-        
-        function generateFortune() {
+
+        function shakeAndReveal() {
+            let box = document.querySelector(".fortune-box");
+            box.classList.add("shake");
+            setTimeout(() => {
+                box.classList.remove("shake");
+                revealFortune();
+            }, 1500);
+        }
+
+        function revealFortune() {
             document.getElementById("fortune").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
             document.getElementById("luckyNumber").innerText = "행운의 번호: " + generateLuckyNumbers();
             document.getElementById("luckyColor").innerText = "행운의 색깔: " + colors[Math.floor(Math.random() * colors.length)];
             document.getElementById("luckyItem").innerText = "행운의 물건: " + items[Math.floor(Math.random() * items.length)];
-        }
-        
-        function showFortune() {
-            document.querySelector(".touch-box").style.display = "none";
-            document.getElementById("fortuneContainer").style.display = "block";
-            generateFortune();
+            
+            document.getElementById("fortune").style.display = "block";
+            document.getElementById("luckyNumber").style.display = "block";
+            document.getElementById("luckyColor").style.display = "block";
+            document.getElementById("luckyItem").style.display = "block";
         }
     </script>
 </body>
